@@ -1,5 +1,9 @@
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json }
 
+export const isTruthy: <T,>(t: T | false | 0 | -0 | 0n | -0n | undefined | null | "") => t is T = Boolean as any;
+
+export const toProperCase = (s: string) => s.substr(0, 1).toLowerCase() + s.substr(1);
+
 export const singleton = <K extends string, V>(key: K, value: V) => {
     return { [key]: value } as { [L in K]: V };
 };
