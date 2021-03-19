@@ -2,12 +2,10 @@ import { readFileSync } from 'fs'
 import * as t from '@babel/types';
 import generate from '@babel/generator';
 import {format} from 'prettier';
-import { parse } from './grammar';
-import * as g from './grammar-ast';
 import { isTruthy, toImproperCase } from './lodash';
-import { Iface, Type, Union } from './meta';
-import { codegenType } from './codegen-type';
-import * as gn from './grammar-new';
+import { Iface, Type, Union } from './type-runtime';
+import { codegenType } from './type-codegen';
+import * as g from './pegts-grammar';
 import { interpret } from './grammar-interp';
 
 // TODO:
@@ -241,7 +239,7 @@ const def = (callName: string) => (name: string, prims: t.Expression): t.Declara
         typeParams.map(name => (
             t.tsTypeParameter(t.tsTypeReference(
                 t.tsQualifiedName(
-                    t.identifier('m'),
+                    t.identifier('f'),
                     t.identifier('TypeTag'),
                 )
             ), null, name)
@@ -250,7 +248,7 @@ const def = (callName: string) => (name: string, prims: t.Expression): t.Declara
     func.returnType = t.tsTypeAnnotation(
         t.tsTypeReference(
             t.tsQualifiedName(
-                t.identifier("m"),
+                t.identifier("f"),
                 t.identifier("Apply"),
             ),
             t.tsTypeParameterInstantiation([
@@ -265,7 +263,7 @@ const def = (callName: string) => (name: string, prims: t.Expression): t.Declara
             t.identifier(toImproperCase(name)),
             t.callExpression(
                 t.memberExpression(
-                    t.identifier("m"),
+                    t.identifier("l"),
                     t.identifier("memo")
                 ),
                 [func],
@@ -297,21 +295,20 @@ const handler: Prims<t.Expression> & Grammar<t.Expression, t.Declaration> = {
     zero: prim('zero'),
 };
 
-// const x = interpret(gn.Klass, `[^\\\\\\[\\]]`);
+const code = readFileSync('pegts-grammar.pegts', 'utf-8');
+const ast = interpret(g.Grammar, code);
 
-const code = readFileSync('grammar.pegts', 'utf-8');
-// const ast = parse(code) as g.Grammar;
-const ast = interpret(gn.Grammar, code);
+const importAllAs = (name: string, from: string) => {
+    return t.importDeclaration(
+        [t.importNamespaceSpecifier(t.identifier(name))],
+        t.stringLiteral(from),
+    );
+};
 
 const defs: t.Declaration[] = [
-    t.importDeclaration(
-        [t.importNamespaceSpecifier(t.identifier("m"))],
-        t.stringLiteral('./meta'),
-    ),
-    t.importDeclaration(
-        [t.importSpecifier(t.identifier("Maybe"), t.identifier("Maybe"))],
-        t.stringLiteral('./lodash'),
-    ),
+    importAllAs('m', './grammar-runtime'),
+    importAllAs('f', './ft'),
+    importAllAs('l', './lodash'),
     ...typeGrammar(ast).map(node => node(codegenType)),
     ...compileGrammar(ast).map(node => node(handler)),
 ];

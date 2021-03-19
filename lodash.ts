@@ -38,6 +38,15 @@ export const flatten = <A,>(xss: A[][]): A[] => {
     return empty.concat(...xss);
 };
 
+export const memo = <T extends object, R>(f: (arg: T) => R) => {
+    const results = new Map<T, R>();
+    return (arg: T): R => results.get(arg) || (() => {
+        const value = f(arg);
+        results.set(arg, value);
+        return value;
+    })();
+};
+
 // utilities to avoid using type name strings (as returned from `typeof`) all over the code
 // they're not compressed by either of minifiers
 export const enum TypeName {

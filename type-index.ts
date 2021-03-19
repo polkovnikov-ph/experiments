@@ -1,4 +1,4 @@
-import { jsonReader, jsonWriter } from './json';
+import { jsonReader, jsonWriter } from './type-json';
 import { inspect } from 'util';
 import * as x from './test';
 

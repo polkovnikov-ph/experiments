@@ -1,5 +1,5 @@
-import { Apply, apply, Expression, define, TypeTag, TermTag, Term } from "./ft";
-import { enumValues } from "./lodash";
+import { Apply, apply, Expression, define, TypeTag, TermTag, Term } from "../ft";
+import { enumValues } from "../lodash";
 
 export type NonReferenceType = null | boolean | number | string;
 

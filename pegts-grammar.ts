@@ -1,5 +1,6 @@
-import * as m from './meta';
-import {Maybe} from './lodash';
+import * as m from './grammar-runtime';
+import * as f from './ft';
+import * as l from './lodash';
 export interface Grammar {
     type: 'Grammar';
     rules: Rule[];
@@ -17,10 +18,10 @@ export interface Sequence {
 }
 export interface Part {
     type: 'Part';
-    field: Maybe<Field>;
-    stringy: Maybe<string>;
+    field: l.Maybe<Field>;
+    stringy: l.Maybe<string>;
     term: Term;
-    suffix: Maybe<Suffix>;
+    suffix: l.Maybe<Suffix>;
 }
 export interface Field {
     type: 'Field';
@@ -37,7 +38,7 @@ export interface Ref {
 }
 export interface Klass {
     type: 'Klass';
-    inverted: Maybe<Inverted>;
+    inverted: l.Maybe<Inverted>;
     parts: ClassPart[];
 }
 export interface Inverted {
@@ -98,10 +99,10 @@ export interface IdentName {
 export interface _ {
     type: '_';
 }
-export const Grammar = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Grammar = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Grammar> =>
+    ): f.Apply<G, Grammar> =>
         f.tagged(
             'Grammar',
             f.seq1(
@@ -114,10 +115,10 @@ export const Grammar = m.memo(
             ),
         ),
 );
-export const Rule = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Rule = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Rule> =>
+    ): f.Apply<G, Rule> =>
         f.untagged(
             'Rule',
             f.sel(
@@ -129,10 +130,10 @@ export const Rule = m.memo(
             ),
         ),
 );
-export const Union = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Union = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Union> =>
+    ): f.Apply<G, Union> =>
         f.tagged(
             'Union',
             f.seq0(
@@ -158,10 +159,10 @@ export const Union = m.memo(
             ),
         ),
 );
-export const Sequence = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Sequence = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Sequence> =>
+    ): f.Apply<G, Sequence> =>
         f.tagged(
             'Sequence',
             f.seq0(
@@ -187,10 +188,10 @@ export const Sequence = m.memo(
             ),
         ),
 );
-export const Part = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Part = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Part> =>
+    ): f.Apply<G, Part> =>
         f.tagged(
             'Part',
             f.seq1(
@@ -212,10 +213,10 @@ export const Part = m.memo(
             ),
         ),
 );
-export const Field = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Field = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Field> =>
+    ): f.Apply<G, Field> =>
         f.tagged(
             'Field',
             f.seq0(
@@ -228,10 +229,10 @@ export const Field = m.memo(
             ),
         ),
 );
-export const Suffix = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Suffix = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Suffix> =>
+    ): f.Apply<G, Suffix> =>
         f.tagged(
             'Suffix',
             f.seq0(
@@ -240,10 +241,10 @@ export const Suffix = m.memo(
             ),
         ),
 );
-export const Term = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Term = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Term> =>
+    ): f.Apply<G, Term> =>
         f.untagged(
             'Term',
             f.sel(
@@ -261,10 +262,10 @@ export const Term = m.memo(
             ),
         ),
 );
-export const Ref = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Ref = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Ref> =>
+    ): f.Apply<G, Ref> =>
         f.tagged(
             'Ref',
             f.seq1(
@@ -274,10 +275,10 @@ export const Ref = m.memo(
             ),
         ),
 );
-export const Klass = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Klass = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Klass> =>
+    ): f.Apply<G, Klass> =>
         f.tagged(
             'Klass',
             f.seq0(
@@ -297,16 +298,16 @@ export const Klass = m.memo(
             ),
         ),
 );
-export const Inverted = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Inverted = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Inverted> =>
+    ): f.Apply<G, Inverted> =>
         f.tagged('Inverted', f.seq0(f.one, f.string('^'))),
 );
-export const ClassPart = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const ClassPart = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, ClassPart> =>
+    ): f.Apply<G, ClassPart> =>
         f.untagged(
             'ClassPart',
             f.sel(
@@ -318,10 +319,10 @@ export const ClassPart = m.memo(
             ),
         ),
 );
-export const Range = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Range = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Range> =>
+    ): f.Apply<G, Range> =>
         f.tagged(
             'Range',
             f.seq1(
@@ -338,10 +339,10 @@ export const Range = m.memo(
             ),
         ),
 );
-export const Single = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Single = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Single> =>
+    ): f.Apply<G, Single> =>
         f.tagged(
             'Single',
             f.seq1(
@@ -351,10 +352,10 @@ export const Single = m.memo(
             ),
         ),
 );
-export const ClassChar = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const ClassChar = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, ClassChar> =>
+    ): f.Apply<G, ClassChar> =>
         f.untagged(
             'ClassChar',
             f.sel(
@@ -366,19 +367,19 @@ export const ClassChar = m.memo(
             ),
         ),
 );
-export const ClassCharSimple = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const ClassCharSimple = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, ClassCharSimple> =>
+    ): f.Apply<G, ClassCharSimple> =>
         f.tagged(
             'ClassCharSimple',
             f.seq1(f.one, 'char', f.klass('^\\\\\\[\\]')),
         ),
 );
-export const ClassCharEscape = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const ClassCharEscape = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, ClassCharEscape> =>
+    ): f.Apply<G, ClassCharEscape> =>
         f.tagged(
             'ClassCharEscape',
             f.seq1(
@@ -388,10 +389,10 @@ export const ClassCharEscape = m.memo(
             ),
         ),
 );
-export const String1 = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String1 = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String1> =>
+    ): f.Apply<G, String1> =>
         f.tagged(
             'String1',
             f.seq0(
@@ -407,10 +408,10 @@ export const String1 = m.memo(
             ),
         ),
 );
-export const String1Char = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String1Char = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String1Char> =>
+    ): f.Apply<G, String1Char> =>
         f.untagged(
             'String1Char',
             f.sel(
@@ -422,28 +423,28 @@ export const String1Char = m.memo(
             ),
         ),
 );
-export const String1CharSimple = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String1CharSimple = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String1CharSimple> =>
+    ): f.Apply<G, String1CharSimple> =>
         f.tagged(
             'String1CharSimple',
             f.seq1(f.one, 'char', f.klass("^'\\\\\\r\\n\\t")),
         ),
 );
-export const String1CharEscape = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String1CharEscape = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String1CharEscape> =>
+    ): f.Apply<G, String1CharEscape> =>
         f.tagged(
             'String1CharEscape',
             f.seq1(f.seq0(f.one, f.string('\\')), 'char', f.klass("'\\\\rnt")),
         ),
 );
-export const String2 = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String2 = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String2> =>
+    ): f.Apply<G, String2> =>
         f.tagged(
             'String2',
             f.seq0(
@@ -459,10 +460,10 @@ export const String2 = m.memo(
             ),
         ),
 );
-export const String2Char = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String2Char = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String2Char> =>
+    ): f.Apply<G, String2Char> =>
         f.untagged(
             'String2Char',
             f.sel(
@@ -474,28 +475,28 @@ export const String2Char = m.memo(
             ),
         ),
 );
-export const String2CharSimple = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String2CharSimple = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String2CharSimple> =>
+    ): f.Apply<G, String2CharSimple> =>
         f.tagged(
             'String2CharSimple',
             f.seq1(f.one, 'char', f.klass('^"\\\\\\r\\n\\t')),
         ),
 );
-export const String2CharEscape = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const String2CharEscape = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, String2CharEscape> =>
+    ): f.Apply<G, String2CharEscape> =>
         f.tagged(
             'String2CharEscape',
             f.seq1(f.seq0(f.one, f.string('\\')), 'char', f.klass('"\\\\rnt')),
         ),
 );
-export const Ident = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const Ident = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, Ident> =>
+    ): f.Apply<G, Ident> =>
         f.tagged(
             'Ident',
             f.seq0(
@@ -508,10 +509,10 @@ export const Ident = m.memo(
             ),
         ),
 );
-export const IdentName = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const IdentName = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, IdentName> =>
+    ): f.Apply<G, IdentName> =>
         f.tagged(
             'IdentName',
             f.seq0(
@@ -520,10 +521,10 @@ export const IdentName = m.memo(
             ),
         ),
 );
-export const _ = m.memo(
-    <T extends m.TypeTag, G extends m.TypeTag>(
+export const _ = l.memo(
+    <T extends f.TypeTag, G extends f.TypeTag>(
         f: m.Grammar1<T, G>,
-    ): m.Apply<G, _> =>
+    ): f.Apply<G, _> =>
         f.tagged('_', f.seq0(f.one, f.some(f.klass(' \\t\\r\\n')))),
 );
 

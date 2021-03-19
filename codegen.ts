@@ -4,12 +4,10 @@ import { format } from 'prettier';
 import { flatten, isTruthy } from './lodash';
 import { readFileSync } from 'fs';
 import { parse } from '@babel/parser';
-import { Iface, Type, Union } from './meta';
-import { codegenType } from './codegen-type';
+import { Iface, Type, Union } from './type-runtime';
+import { codegenType } from './type-codegen';
 
 require("util").inspect.defaultOptions.depth = null;
-
-// export const Grammar = <T,>(f: m.Cons<T>): T => f.cons('grammar', f.field(f.nil, 'rules', f.array(f.ref(() => Rule(f)))));
 
 type FT = <T>(alg: Type<T>) => T;
 type FI = <T, I>(alg: Type<T> & Iface<T, I> & Union<T, I>) => I;

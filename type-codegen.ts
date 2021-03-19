@@ -1,5 +1,5 @@
 import * as t from '@babel/types';
-import { Iface, Type, Union } from "./meta";
+import { Iface, Type, Union } from "./type-runtime";
 
 const babelifyType: Type<t.TSType> = {
     ref: (name: string): t.TSType => {
@@ -9,7 +9,10 @@ const babelifyType: Type<t.TSType> = {
         return t.tsArrayType(child);
     },
     maybe: (child: t.TSType): t.TSType => {
-        const result = t.tsTypeReference(t.identifier('Maybe'));
+        const result = t.tsTypeReference(t.tsQualifiedName(
+            t.identifier('l'),
+            t.identifier('Maybe'),
+        ));
         result.typeParameters = t.tsTypeParameterInstantiation([child]);
         return result;
     },

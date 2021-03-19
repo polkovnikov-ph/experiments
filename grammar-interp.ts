@@ -1,5 +1,5 @@
 import { singleton } from "./lodash";
-import { Grammar1 } from "./meta";
+import { Grammar1 } from "./grammar-runtime";
 
 type Context = {
     s: string;
@@ -8,7 +8,7 @@ type Context = {
 }
 declare const FailVT: unique symbol;
 type Fail = typeof FailVT
-const Fail: Fail = {} as Fail;
+const Fail: Fail = {fail: true} as unknown as Fail;
 type InterpretT<T> = (ctx: Context) => T | Fail
 declare const InterpretTag: unique symbol;
 type Interpret = typeof InterpretTag
@@ -34,7 +34,6 @@ const interpreter: Grammar1<Interpret, Interpret> = {
         const r = new RegExp(`[${value}]`);
         return c => {
             const x = c.s[c.p];
-            // r.lastIndex = 0;
             if (c.p < c.l && x.match(r)) {
                 ++c.p;
                 return x;

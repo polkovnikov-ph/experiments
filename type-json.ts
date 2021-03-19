@@ -1,5 +1,5 @@
-import { Json, properIn, singleton, toProperCase } from './lodash';
-import * as m from './meta';
+import { Json, properIn, singleton } from './lodash';
+import * as m from './type-runtime';
 
 type ToJsonT<T> = (value: T) => Json
 type ToJson1T<T> = (value: T) => Record<string, Json>
@@ -25,7 +25,7 @@ export const jsonWriter: m.TypeMeta1<ToJson, ToJson1, ToJson> = ({
     string: (v) => v,
     nil: () => ({}),
     field: (l, n, r) => (v) => ({...l(v), [n]: r(v[n])}),
-    typeDef: (name, children) => (v) => ({type: v.type, ...children[v.type](v)}),
+    typeDef: (_name, children) => (v) => ({type: v.type, ...children[v.type](v)}),
 });
 
 export const jsonReader: m.TypeMeta1<FromJson, FromJson, FromJson> = {
@@ -47,7 +47,7 @@ export const jsonReader: m.TypeMeta1<FromJson, FromJson, FromJson> = {
         if (typeof v !== 'object' || v === null || Array.isArray(v)) throw 42;
         return {...l(v), ...singleton(n, r(v[n]))};
     },
-    typeDef: (name, children) => (v) => {
+    typeDef: (_name, children) => (v) => {
         if (typeof v !== 'object' || v === null || !('type' in v)) throw 42;
         const {type} = v;
         if (typeof type !== 'string' || !properIn(type, children)) throw 42;
