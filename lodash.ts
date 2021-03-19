@@ -1,12 +1,15 @@
+export type Maybe<T> = T | undefined;
+
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json }
 
 export const isTruthy: <T,>(t: T | false | 0 | -0 | 0n | -0n | undefined | null | "") => t is T = Boolean as any;
 
 export const toProperCase = (s: string) => s.substr(0, 1).toLowerCase() + s.substr(1);
+export const toImproperCase = (s: string) => s.substr(0, 1).toUpperCase() + s.substr(1);
 
-export const singleton = <K extends string, V>(key: K, value: V) => {
-    return { [key]: value } as { [L in K]: V };
-};
+export const singleton = <K extends string, V>(key: K, value: V) => ({[key]: value} as Record<K, V>);
+
+export const properIn = <K extends string, O>(key: K, object: O): key is K & keyof O => key in object;
 
 export const keysOf = <O extends {}>(o: O) => Object.keys(o) as Extract<keyof O, string>[];
 

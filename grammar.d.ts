@@ -1,0 +1,1 @@
+export declare const parse: (text: string) => unknown;
