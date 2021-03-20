@@ -1,4 +1,6 @@
-import * as m from './meta';
+import * as m from './type-runtime';
+import * as l from './lodash';
+import * as f from './ft';
 export interface Bar {
     type: 'Bar';
     bar: string;
@@ -16,10 +18,10 @@ export const baz = (baz: number): Baz => ({
     type: 'Baz',
     baz,
 });
-export const Foo = m.memo(
-    <T extends m.TypeTag, C extends m.TypeTag, D extends m.TypeTag>(
+export const Foo = l.memo(
+    <T extends f.TypeTag, C extends f.TypeTag, D extends f.TypeTag>(
         f: m.TypeMeta1<T, C, D>,
-    ): m.Apply<D, Foo> =>
+    ): f.Apply<D, Foo> =>
         f.typeDef('Foo', {
             Bar: f.field(f.nil, 'bar', f.string),
             Baz: f.field(f.nil, 'baz', f.number),
